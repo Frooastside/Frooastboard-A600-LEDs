@@ -5,7 +5,7 @@ use rand::{thread_rng, Rng};
 use std::{thread, time};
 
 fn main() {
-    let time_delay = time::Duration::from_millis(30);
+    let time_delay = time::Duration::from_millis(80);
 
     let api = HidApi::new().unwrap();
     let mut devices: Vec<&DeviceInfo> = api
@@ -31,9 +31,9 @@ fn main() {
         device.get_product_string().unwrap().unwrap()
     );
 
-    send_initialize(&device);
+    //send_initialize(&device);
 
-    for _ in 0..128 {
+    for _ in 0..64 {
         let mut rng = thread_rng();
         send_update(
             &device,
@@ -44,19 +44,19 @@ fn main() {
         thread::sleep(time_delay);
     }
 
-    send_update(&device, false, false, false);
+    send_update(&device, true, false, false);
 }
 
 #[derive(Clone, Copy)]
 enum MessageType {
-    Initialize = 0xA4,
+    //Initialize = 0xA4,
     Update = 0xA6,
 }
 
-fn send_initialize(device: &HidDevice) {
+/*fn send_initialize(device: &HidDevice) {
     let content: [u8; 16] = [0; 16];
     send_raw_message(device, MessageType::Initialize, &content);
-}
+}*/
 
 fn send_update(device: &HidDevice, first_led: bool, second_led: bool, third_led: bool) {
     let mut content: [u8; 16] = [0; 16];
